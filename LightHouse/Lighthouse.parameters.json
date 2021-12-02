@@ -1,0 +1,25 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mspOfferName": {
+            "value": "Test PW Lighthouse"
+        },
+        "mspOfferDescription": {
+            "value": "Test PW Lighthouse"
+        },
+        "managedByTenantId": {
+            "value": "34f693ef-3dfd-44cb-9bdd-2bb4f7bb08e1"
+        },
+        "authorizations": {
+            "value": [
+                {
+                    "principalId": "a6be1300-0be1-4553-b049-9197ffab11b0",
+                    
+                    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                    "principalIdDisplayName": "YRFree Contributors"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.4.1008.15138",
+      "templateHash": "2222450822084547112"
+    }
+  },
+  "parameters": {
+    "mspOfferName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify a unique name for your offer"
+      }
+    },
+    "mspOfferDescription": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Managed Service Provider offering"
+      }
+    },
+    "managedByTenantId": {
+      "type": "string",
+      "metadata": {
+        "description": "Specify the tenant id of the Managed Service Provider"
+      }
+    },
+    "authorizations": {
+      "type": "array",
+      "metadata": {
+        "description": "Specify an array of objects, containing tuples of Azure Active Directory principalId, a Azure roleDefinitionId, and an optional principalIdDisplayName. The roleDefinition specified is granted to the principalId in the provider`s Active Directory and the principalIdDisplayName is visible to customers."
+      }
+    }
+  },
+  "functions": [],
+  "variables": {
+    "mspRegistrationName": "[guid(parameters('mspOfferName'))]",
+    "mspAssignmentName": "[guid(parameters('mspOfferName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ManagedServices/registrationDefinitions",
+      "apiVersion": "2019-09-01",
+      "name": "[variables('mspRegistrationName')]",
+      "properties": {
+        "registrationDefinitionName": "[parameters('mspOfferName')]",
+        "description": "[parameters('mspOfferDescription')]",
+        "managedByTenantId": "[parameters('managedByTenantId')]",
+        "authorizations": "[parameters('authorizations')]"
+      }
+    },
+    {
+      "type": "Microsoft.ManagedServices/registrationAssignments",
+      "apiVersion": "2019-09-01",
+      "name": "[variables('mspAssignmentName')]",
+      "properties": {
+        "registrationDefinitionId": "[subscriptionResourceId('Microsoft.ManagedServices/registrationDefinitions', variables('mspRegistrationName'))]"
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.ManagedServices/registrationDefinitions', variables('mspRegistrationName'))]"
+      ]
+    }
+  ]
+}
