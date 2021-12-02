@@ -9,15 +9,15 @@
             "value": "Test PW Lighthouse"
         },
         "managedByTenantId": {
-            "value": "34f693ef-3dfd-44cb-9bdd-2bb4f7bb08e1"
+            "value": "000000000000000000000000000000000000"
         },
         "authorizations": {
             "value": [
                 {
-                    "principalId": "a6be1300-0be1-4553-b049-9197ffab11b0",
+                    "principalId": "0000000000000000000000000000000",
                     
-                    "roleDefinitionId": "b24988ac-6180-42a0-ab88-20f7382dd24c",
-                    "principalIdDisplayName": "YRFree Contributors"
+                    "roleDefinitionId": "0000000000000000000000000000000000",
+                    "principalIdDisplayName": "XXXXXXXXXXXXXXXXXXXXXX"
                 }
             ]
         }
