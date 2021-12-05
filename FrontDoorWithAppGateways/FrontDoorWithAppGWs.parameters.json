@@ -6,17 +6,17 @@
             "value": [
                 {
                     "Region": "UKSouth",
-                    "RegionNumber": "1",
+                    "VersionNumber": "1",
                     "SKU"   : "WAF_v2"
                 },
                 {
                     "Region": "NorthEurope",
-                    "RegionNumber": "1",
+                    "VersionNumber": "1",
                     "SKU"   : "WAF_v2"
                 },
                 {
                     "Region": "NorthEurope",
-                    "RegionNumber": "2",
+                    "VersionNumber": "2",
                     "SKU"   : "WAF_v2"
                 }
             ]
