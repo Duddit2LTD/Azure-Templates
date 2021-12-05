@@ -1,9 +1,10 @@
 param prefix string
-param AppGWRegionList array
+param RegionList array
 param ResourceTags object
+param FD object
 
 
-resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in AppGWRegionList:{
+resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in RegionList:{
   name: '${prefix}-VNET-${VNET.location}-${VNET.VersionNumber}'
   location: '${VNET.location}'
   tags: ResourceTags
@@ -41,7 +42,7 @@ resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in Ap
 
 }]
 
-resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in AppGWRegionList:{
+resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in RegionList:{
   name: '${prefix}-ApGW_PIP-${pip.location}-${pip.VersionNumber}'
   location: pip.location
   tags: ResourceTags
@@ -58,7 +59,7 @@ resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in App
   }
 }]
 
-resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for appgw in AppGWRegionList: {
+resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for appgw in RegionList: {
   name: '${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}'
   location: '${appgw.location}'
   tags: ResourceTags
@@ -185,3 +186,27 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
     ]
   }
 }]  
+
+resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
+  name: '${prefix}-FD-${FD.location}'
+  location: 'global'
+  tags: ResourceTags
+  properties: {
+    frontendEndpoints: [
+      {
+        name: FD.FrontEndPointsName
+        properties: {
+          hostName: FD.HostName
+          sessionAffinityEnabledState: 'Disabled'
+          sessionAffinityTtlSeconds: 0
+        }
+      }
+    ]
+    backendPools: [
+      {
+        name: FD.BackEndPoolName
+
+      }
+    ]
+  }
+}

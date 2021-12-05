@@ -11,13 +11,26 @@
                 "delete": "yes",
                 "dev-test-prod": "DEV"
             }
-        },    
-        "AppGWRegionList": {
+        },
+
+        "FD": {
+            "value": [
+                {
+                    "location": "UKSouth",
+                    "HostName": "NC-PJ-FD-01.azurefd.net",                    
+                    "BackEndPoolName": "BE01",
+                    "FrontEndPointsName": "FE01"
+                }
+            ]
+        },
+            
+        "RegionList": {
             "value": [
                 {
                     "location": "UKSouth",
                     "VersionNumber": "1",
                     "SKU"   : "WAF_v2",
+                    "VNET_ID": "",
                     "VNET_CIDR": "10.0.0.0/16",
                     "AppGWSN": "10.0.0.0/24"
                 },

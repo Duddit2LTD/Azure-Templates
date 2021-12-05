@@ -1,0 +1,120 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "frontdoors_NC_FD_PJ_name": {
+            "defaultValue": "NC-FD-PJ",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/frontdoors",
+            "apiVersion": "2020-05-01",
+            "name": "[parameters('frontdoors_NC_FD_PJ_name')]",
+            "location": "Global",
+            "properties": {
+                "routingRules": [
+                    {
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/RoutingRules/Rule01')]",
+                        "name": "Rule01",
+                        "properties": {
+                            "routeConfiguration": {
+                                "forwardingProtocol": "HttpsOnly",
+                                "backendPool": {
+                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/backendPools/BE01')]"
+                                },
+                                "@odata.type": "#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration"
+                            },
+                            "resourceState": "Enabled",
+                            "frontendEndpoints": [
+                                {
+                                    "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), concat('/frontendEndpoints/', parameters('frontdoors_NC_FD_PJ_name'), '-azurefd-net'))]"
+                                }
+                            ],
+                            "acceptedProtocols": [
+                                "Http"
+                            ],
+                            "patternsToMatch": [
+                                "/*"
+                            ],
+                            "enabledState": "Enabled"
+                        }
+                    }
+                ],
+                "resourceState": "Enabled",
+                "loadBalancingSettings": [
+                    {
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/LoadBalancingSettings/loadBalancingSettings-1638719225649')]",
+                        "name": "loadBalancingSettings-1638719225649",
+                        "properties": {
+                            "resourceState": "Enabled",
+                            "sampleSize": 4,
+                            "successfulSamplesRequired": 2,
+                            "additionalLatencyMilliseconds": 0
+                        }
+                    }
+                ],
+                "healthProbeSettings": [
+                    {
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/HealthProbeSettings/healthProbeSettings-1638719225649')]",
+                        "name": "healthProbeSettings-1638719225649",
+                        "properties": {
+                            "resourceState": "Enabled",
+                            "path": "/",
+                            "protocol": "Http",
+                            "intervalInSeconds": 30,
+                            "enabledState": "Enabled",
+                            "healthProbeMethod": "Head"
+                        }
+                    }
+                ],
+                "backendPools": [
+                    {
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/BackendPools/BE01')]",
+                        "name": "BE01",
+                        "properties": {
+                            "backends": [
+                                {
+                                    "address": "20.123.39.194",
+                                    "httpPort": 80,
+                                    "httpsPort": 443,
+                                    "priority": 1,
+                                    "weight": 50,
+                                    "backendHostHeader": "20.123.39.194",
+                                    "enabledState": "Enabled"
+                                }
+                            ],
+                            "resourceState": "Enabled",
+                            "loadBalancingSettings": {
+                                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/loadBalancingSettings/loadBalancingSettings-1638719225649')]"
+                            },
+                            "healthProbeSettings": {
+                                "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), '/healthProbeSettings/healthProbeSettings-1638719225649')]"
+                            }
+                        }
+                    }
+                ],
+                "frontendEndpoints": [
+                    {
+                        "id": "[concat(resourceId('Microsoft.Network/frontdoors', parameters('frontdoors_NC_FD_PJ_name')), concat('/FrontendEndpoints/', parameters('frontdoors_NC_FD_PJ_name'), '-azurefd-net'))]",
+                        "name": "[concat(parameters('frontdoors_NC_FD_PJ_name'), '-azurefd-net')]",
+                        "properties": {
+                            "resourceState": "Enabled",
+                            "hostName": "[concat(parameters('frontdoors_NC_FD_PJ_name'), '.azurefd.net')]",
+                            "sessionAffinityEnabledState": "Disabled",
+                            "sessionAffinityTtlSeconds": 0
+                        }
+                    }
+                ],
+                "backendPoolsSettings": {
+                    "enforceCertificateNameCheck": "Enabled",
+                    "sendRecvTimeoutSeconds": 30
+                },
+                "enabledState": "Enabled",
+                "friendlyName": "[parameters('frontdoors_NC_FD_PJ_name')]"
+            }
+        }
+    ]
+}
