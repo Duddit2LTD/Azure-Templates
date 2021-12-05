@@ -1,33 +1,64 @@
 param prefix string
 param AppGWRegionList array
 
+
 resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01' = [for VNET in AppGWRegionList:{
   name: '${prefix}-VNET${VNET.location}'
   location: '${VNET.location}'
   properties: {
-
     addressSpace: {
       addressPrefixes: [
         '10.0.0.0/16'
       ]
     }
+    subnets: [
+      {
+        name: '${prefix}-VNET${VNET.location}-AppGW-SN'
+        properties: {
+          addressPrefix:'10.0.100.240'
+          serviceEndpoints: [
+            {
+              service: 'microsoft.storage'
+              locations: [
+                VNET.location
+              ]
+            }
+            {
+              service: 'Microsoft.KeyVault'
+              locations: [
+                '*'
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+
     
 
 }]
 
+
 resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in AppGWRegionList:{
   name: '${prefix}-ApGW_PIP-${pip.location}-${pip.VersionNumber}'
   location: pip.location
+  dependsOn: [
+    
+  ]
   sku: {
     name: 'Standard'
     tier: 'Regional'
   }
 }]
 
-
 resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for appgw in AppGWRegionList: {
   name: '${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}'
   location: '${appgw.location}'
+  dependsOn:[
+    VNETs
+    PIPs
+  ]
   identity: {
     type:'SystemAssigned'
   }
@@ -130,6 +161,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
       {
         name: 'Routing'
         properties: {
+          priority: 10
           httpListener: {
             id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/-FE01'
           }
@@ -138,12 +170,9 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
           }
           backendHttpSettings: {
             id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/-BE_HTTP'
-          }
-          priority: 10
-          
+          }          
         }
       }
-      
     ]
   }
-}]
+}]  
