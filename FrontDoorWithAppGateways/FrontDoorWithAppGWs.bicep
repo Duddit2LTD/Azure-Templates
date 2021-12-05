@@ -3,6 +3,8 @@ param RegionList array
 param ResourceTags object
 param FD object
 
+var AppGWRIDPrefix = '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways'
+
 
 resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in RegionList:{
   name: '${prefix}-VNET-${VNET.location}-${VNET.VersionNumber}'
@@ -153,10 +155,10 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         name: 'FE01'
         properties: {
           frontendIPConfiguration: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
+            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
           }
           frontendPort: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
+            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
           }
           protocol: 'Http'
 
@@ -173,13 +175,13 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
           priority: 10
           httpListener: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
+            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
           }
           backendAddressPool: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
+            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
           }
           backendHttpSettings: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
+            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
           }          
         }
       }
