@@ -1,0 +1,37 @@
+{
+    "status": "Failed",
+    "error": {
+        "code": "InvalidRequestFormat",
+        "message": "Cannot parse the request.",
+        "details": [
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/virtualNetworks/PJ-VNET-NorthEurope-2-AppGW-SN is not formatted correctly. The Id is expected to reference resources of type virtualNetworks/subnets. Path properties.gatewayIPConfigurations[0].properties.subnet."
+            },
+            {
+                "code": "SubscriptionsPrefixMissingInJsonReferenceId",
+                "message": "Value of id property has to start with '/subscriptions/'. Provided value doesn't: PJ-pip-NorthEurope-2. Path properties.frontendIPConfigurations[0].properties.publicIPAddress."
+            },
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/applicationGateways/PJ-AppGW-NorthEurope-2/frontendIPConfigurations/FE01 is not formatted correctly. The Id is expected to reference resources of type applicationGateways/frontendIPConfigurations. Path properties.httpListeners[0].properties.frontendIPConfiguration."
+            },
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/applicationGateways/PJ-AppGW-NorthEurope-2/frontendPorts/HTTP is not formatted correctly. The Id is expected to reference resources of type applicationGateways/frontendPorts. Path properties.httpListeners[0].properties.frontendPort."
+            },
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/applicationGateways/PJ-AppGW-NorthEurope-2/httplisteners/-FE01 is not formatted correctly. The Id is expected to reference resources of type applicationGateways/httpListeners. Path properties.requestRoutingRules[0].properties.httpListener."
+            },
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/applicationGateways/PJ-AppGW-NorthEurope-2/backendaddresspools/-BE01 is not formatted correctly. The Id is expected to reference resources of type applicationGateways/backendAddressPools. Path properties.requestRoutingRules[0].properties.backendAddressPool."
+            },
+            {
+                "code": "InvalidJsonReferenceFormat",
+                "message": "Reference Id /subscriptions//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups//subscriptions/f0cc1032-d31b-4e08-81d9-7e97d4223735/resourceGroups/RG-PaulJonesMC-uks/providers/Microsoft.Network/applicationGateways/PJ-AppGW-NorthEurope-2/backendHttpSettingsCollection/-BE_HTTP is not formatted correctly. The Id is expected to reference resources of type applicationGateways/backendHttpSettingsCollection. Path properties.requestRoutingRules[0].properties.backendHttpSettings."
+            }
+        ]
+    }
+}

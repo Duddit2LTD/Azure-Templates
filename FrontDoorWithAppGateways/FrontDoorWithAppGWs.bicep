@@ -1,21 +1,23 @@
 param prefix string
 param AppGWRegionList array
+param ResourceTags object
 
 
-resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01' = [for VNET in AppGWRegionList:{
-  name: '${prefix}-VNET${VNET.location}'
+resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in AppGWRegionList:{
+  name: '${prefix}-VNET-${VNET.location}-${VNET.VersionNumber}'
   location: '${VNET.location}'
+  tags: ResourceTags
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.0.0.0/16'
+        VNET.VNET_CIDR
       ]
     }
     subnets: [
       {
-        name: '${prefix}-VNET${VNET.location}-AppGW-SN'
+        name: '${prefix}-VNET-${VNET.location}-${VNET.VersionNumber}-AppGW-SN'
         properties: {
-          addressPrefix:'10.0.100.240'
+          addressPrefix: VNET.AppGWSN
           serviceEndpoints: [
             {
               service: 'microsoft.storage'
@@ -39,10 +41,14 @@ resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01' = [for VNET in App
 
 }]
 
-
 resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in AppGWRegionList:{
   name: '${prefix}-ApGW_PIP-${pip.location}-${pip.VersionNumber}'
   location: pip.location
+  tags: ResourceTags
+  properties: {
+    
+    publicIPAllocationMethod: 'Static'
+  }
   dependsOn: [
     
   ]
@@ -55,21 +61,24 @@ resource PIPs 'Microsoft.Network/publicIPAddresses@2021-03-01' = [for pip in App
 resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for appgw in AppGWRegionList: {
   name: '${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}'
   location: '${appgw.location}'
+  tags: ResourceTags
   dependsOn:[
     VNETs
     PIPs
   ]
-  identity: {
+ /*  identity: {
     type:'SystemAssigned'
-  }
+  } */
   properties: {
     enableHttp2: true
-    enableFips: false
+    //enableFips: false
+
     sku: {
       name: appgw.SKU
       tier: appgw.SKU
-      capacity: 1
+      //capacity: 1
     }
+    
     webApplicationFirewallConfiguration: {
       enabled: true
       firewallMode: 'Detection' 
@@ -85,7 +94,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         name: 'AppGatewayIPConfig'
         properties: {
           subnet: {
-            id: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx_AppGWSubnet' //This string specifies the subnet ID
+            id: '${resourceGroup().id}/providers/Microsoft.Network/virtualNetworks/${prefix}-VNET-${appgw.location}-${appgw.VersionNumber}/subnets/${prefix}-VNET-${appgw.location}-${appgw.VersionNumber}-AppGW-SN' //This string specifies the subnet ID ${prefix}-VNET-${VNET.location}-${VNET.VersionNumber}-AppGW-SN
           }
         }
       }
@@ -96,7 +105,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
         
           publicIPAddress: {
-            id: '${prefix}-pip-${appgw.location}-${appgw.VersionNumber}'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/publicIPAddresses/${prefix}-ApGW_PIP-${appgw.location}-${appgw.VersionNumber}'
           }
         
           
@@ -115,12 +124,12 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
     ]
     backendAddressPools: [ 
       {
-        name: '${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}-BE01'
+        name: 'BE01'
+
         properties: {
+
           backendAddresses: [
-            {
-              
-            }
+            
           ]
 
         }
@@ -140,13 +149,13 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
     ]
     httpListeners: [
       {
-        name: 'MultisiteListener'
+        name: 'FE01'
         properties: {
           frontendIPConfiguration: {
-            id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
           }
           frontendPort: {
-            id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
           }
           protocol: 'Http'
 
@@ -163,13 +172,13 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
           priority: 10
           httpListener: {
-            id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/-FE01'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
           }
           backendAddressPool: {
-            id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/-BE01'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
           }
           backendHttpSettings: {
-            id: '/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/-BE_HTTP'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
           }          
         }
       }

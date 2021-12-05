@@ -2,22 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "Prefix": {
+            "value": "PJ"
+        },
+        "ResourceTags": {
+            "value": {
+                "cost center": "CoreIT",
+                "delete": "yes",
+                "dev-test-prod": "DEV"
+            }
+        },    
         "AppGWRegionList": {
             "value": [
                 {
-                    "Region": "UKSouth",
+                    "location": "UKSouth",
                     "VersionNumber": "1",
-                    "SKU"   : "WAF_v2"
+                    "SKU"   : "WAF_v2",
+                    "VNET_CIDR": "10.0.0.0/16",
+                    "AppGWSN": "10.0.0.0/24"
                 },
                 {
-                    "Region": "NorthEurope",
+                    "location": "NorthEurope",
                     "VersionNumber": "1",
-                    "SKU"   : "WAF_v2"
+                    "SKU"   : "WAF_v2",
+                    "VNET_CIDR": "10.1.0.0/16",
+                    "AppGWSN": "10.1.0.0/24"
                 },
                 {
-                    "Region": "NorthEurope",
+                    "location": "NorthEurope",
                     "VersionNumber": "2",
-                    "SKU"   : "WAF_v2"
+                    "SKU"   : "WAF_v2",
+                    "VNET_CIDR": "10.2.0.0/16",
+                    "AppGWSN": "10.2.0.0/24"
                 }
             ]
         }
