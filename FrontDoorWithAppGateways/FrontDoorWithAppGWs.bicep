@@ -144,7 +144,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         name: 'FE01'
         properties: {
           frontendIPConfiguration: {
-            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/${FD.FE01}'
           }
           frontendPort: {
             id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
@@ -163,10 +163,10 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
           priority: 10
           httpListener: {
-            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/${FD.FE01}'
           }
           backendAddressPool: {
-            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/${FD.BE01}'
           }
           backendHttpSettings: {
             id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
@@ -189,7 +189,7 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
         properties:{
           frontendEndpoints: [
             {
-              id: resourceId('Microsoft.Network/frontDoors/frontendEndpoints', '${prefix}-FD-${FD.location}', 'FE01')
+              id: resourceId('Microsoft.Network/frontDoors/frontendEndpoints', '${prefix}-FD-${FD.location}', '${FD.FE01}')
             }
           ]
           acceptedProtocols: [
@@ -203,7 +203,7 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
             '@odata.type': '#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration'
             forwardingProtocol: 'MatchRequest'
             backendPool: {
-              id: resourceId('Microsoft.Network/frontDoors/backendPools', '${prefix}-FD-${FD.location}', 'BE01')
+              id: resourceId('Microsoft.Network/frontDoors/backendPools', '${prefix}-FD-${FD.location}', '${FD.BE01}')
             }
           }
 
