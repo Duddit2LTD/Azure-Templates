@@ -12,17 +12,18 @@
                 "dev-test-prod": "DEV"
             }
         },
-
         "FD": {
-            "value": [
+            "value": 
                 {
                     "location": "UKSouth",
                     "HostName": "NC-PJ-FD-01.azurefd.net",                    
                     "BackEndPoolName": "BE01",
-                    "FrontEndPointsName": "FE01"
+                    "FrontEndPointsName": "FE01",
+                    "BackEndHostName": "www.google.com"
                 }
-            ]
+            
         },
+
             
         "RegionList": {
             "value": [

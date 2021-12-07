@@ -3,6 +3,7 @@ param RegionList array
 param ResourceTags object
 param FD object
 
+
 var AppGWRIDPrefix = '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways'
 
 
@@ -74,14 +75,10 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
   } */
   properties: {
     enableHttp2: true
-    //enableFips: false
-
     sku: {
       name: appgw.SKU
       tier: appgw.SKU
-      //capacity: 1
     }
-    
     webApplicationFirewallConfiguration: {
       enabled: true
       firewallMode: 'Detection' 
@@ -106,14 +103,11 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
       {
         name:  'FE01'
         properties: {
-        
+
           publicIPAddress: {
             id: '${resourceGroup().id}/providers/Microsoft.Network/publicIPAddresses/${prefix}-ApGW_PIP-${appgw.location}-${appgw.VersionNumber}'
-          }
-        
-          
+          }        
         }
-        
       }
     ]
     frontendPorts: [
@@ -122,19 +116,14 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
           port: 80
         }
-        
       }
     ]
     backendAddressPools: [ 
       {
         name: 'BE01'
-
         properties: {
-
           backendAddresses: [
-            
           ]
-
         }
       }
     ]
@@ -161,9 +150,8 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
             id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
           }
           protocol: 'Http'
-
           hostNames: [
-          
+            
           ]
           requireServerNameIndication:false
         }
@@ -194,6 +182,34 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
   location: 'global'
   tags: ResourceTags
   properties: {
+    enabledState: 'Enabled'
+    routingRules: [
+      {
+        name: 'RoutingRule01'
+        properties:{
+          frontendEndpoints: [
+            {
+              id: resourceId('Microsoft.Network/frontDoors/frontendEndpoints', '${prefix}-FD-${FD.location}', 'FE01')
+            }
+          ]
+          acceptedProtocols: [
+            'Http'
+            'Https'
+          ]
+          patternsToMatch: [
+            '/'
+          ]
+          routeConfiguration: {
+            '@odata.type': '#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration'
+            forwardingProtocol: 'MatchRequest'
+            backendPool: {
+              id: resourceId('Microsoft.Network/frontDoors/backendPools', '${prefix}-FD-${FD.location}', 'BE01')
+            }
+          }
+
+        }  
+      }
+    ]
     frontendEndpoints: [
       {
         name: FD.FrontEndPointsName
@@ -204,11 +220,49 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
         }
       }
     ]
+    
     backendPools: [
       {
         name: FD.BackEndPoolName
-
+        properties: {
+          healthProbeSettings: {
+            id: resourceId('Microsoft.Network/frontDoors/healthProbeSettings', '${prefix}-FD-${FD.location}', 'HealthProbeSettings01')
+          }
+          loadBalancingSettings: {
+            id: resourceId('Microsoft.Network/frontDoors/loadBalancingSettings', '${prefix}-FD-${FD.location}', 'loadBalancingSettings01')
+          }
+          backends: [
+            {
+              address: FD.BackEndHostName
+              httpPort: 80
+              httpsPort: 443
+              priority: 1
+              weight: 50
+              backendHostHeader: FD.BackEndHostName
+            }
+          ]
+        }
       }
     ]
+    healthProbeSettings: [
+      {
+        name: 'HealthProbeSettings01'
+        properties: {
+          path: '/'
+          protocol: 'Http'
+          intervalInSeconds: 120
+        }
+      }
+    ]
+    loadBalancingSettings: [
+      {
+        name: 'loadBalancingSettings01'
+        properties:{
+          sampleSize: 4
+          successfulSamplesRequired: 2
+        }
+      }
+    ]
+
   }
 }
