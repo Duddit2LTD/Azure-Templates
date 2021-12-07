@@ -4,7 +4,7 @@ param ResourceTags object
 param FD object
 
 
-var AppGWRIDPrefix = '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways'
+var AppGWIDPrefix = '${resourceGroup().id}/providers/Microsoft.Network/applicationGateways'
 
 
 resource VNETs 'Microsoft.Network/virtualNetworks@2021-03-01'  = [for VNET in RegionList:{
@@ -144,10 +144,10 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         name: 'FE01'
         properties: {
           frontendIPConfiguration: {
-            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendIPConfigurations/FE01'
           }
           frontendPort: {
-            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/frontendPorts/HTTP'
           }
           protocol: 'Http'
           hostNames: [
@@ -163,13 +163,13 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
         properties: {
           priority: 10
           httpListener: {
-            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/httplisteners/FE01'
           }
           backendAddressPool: {
-            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendaddresspools/BE01'
           }
           backendHttpSettings: {
-            id: '${AppGWRIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
+            id: '${AppGWIDPrefix}/${prefix}-AppGW-${appgw.location}-${appgw.VersionNumber}/backendHttpSettingsCollection/BE_HTTP'
           }          
         }
       }
