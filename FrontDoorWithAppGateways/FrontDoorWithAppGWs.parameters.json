@@ -19,7 +19,9 @@
                     "HostName": "NC-PJ-FD-01.azurefd.net",                    
                     "BackEndPoolName": "BE01",
                     "FrontEndPointsName": "FE01",
-                    "BackEndHostName": "www.google.com"
+                    "BackEndHostName": "www.google.com",
+                    "FE01": "FE01",
+                    "BE01":"BE01"
                 }
             
         },

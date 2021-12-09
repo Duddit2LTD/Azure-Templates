@@ -178,7 +178,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
 }]  
 
 resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
-  name: '${prefix}-FD-${FD.location}'
+  name: 'NC-PJ-FD-01'
   location: 'global'
   tags: ResourceTags
   properties: {
