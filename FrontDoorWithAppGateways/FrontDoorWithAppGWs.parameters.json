@@ -7,14 +7,15 @@
         },
         "ResourceTags": {
             "value": {
-                "cost center": "CoreIT",
+                "cost center": "Core IT",
                 "delete": "yes",
-                "dev-test-prod": "DEV"
+                "env": "DEV"
             }
         },
         "FD": {
             "value": 
                 {
+                    "Name":"NC-PJ-FD-01",
                     "location": "UKSouth",
                     "HostName": "NC-PJ-FD-01.azurefd.net",                    
                     "BackEndPoolName": "BE01",

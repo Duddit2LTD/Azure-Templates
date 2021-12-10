@@ -178,7 +178,7 @@ resource AppGateways 'Microsoft.Network/applicationGateways@2021-03-01' = [for a
 }]  
 
 resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
-  name: 'NC-PJ-FD-01'
+  name: FD.name
   location: 'global'
   tags: ResourceTags
   properties: {
@@ -189,7 +189,7 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
         properties:{
           frontendEndpoints: [
             {
-              id: resourceId('Microsoft.Network/frontDoors/frontendEndpoints', '${prefix}-FD-${FD.location}', '${FD.FE01}')
+              id: resourceId('Microsoft.Network/frontDoors/frontendEndpoints', '${FD.Name}', '${FD.FE01}')
             }
           ]
           acceptedProtocols: [
@@ -203,7 +203,7 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
             '@odata.type': '#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration'
             forwardingProtocol: 'MatchRequest'
             backendPool: {
-              id: resourceId('Microsoft.Network/frontDoors/backendPools', '${prefix}-FD-${FD.location}', '${FD.BE01}')
+              id: resourceId('Microsoft.Network/frontDoors/backendPools', '${FD.Name}', '${FD.BE01}')
             }
           }
 
@@ -226,10 +226,10 @@ resource FrontDoor 'Microsoft.Network/frontDoors@2020-05-01' = {
         name: FD.BackEndPoolName
         properties: {
           healthProbeSettings: {
-            id: resourceId('Microsoft.Network/frontDoors/healthProbeSettings', '${prefix}-FD-${FD.location}', 'HealthProbeSettings01')
+            id: resourceId('Microsoft.Network/frontDoors/healthProbeSettings', '${FD.Name}', 'HealthProbeSettings01')
           }
           loadBalancingSettings: {
-            id: resourceId('Microsoft.Network/frontDoors/loadBalancingSettings', '${prefix}-FD-${FD.location}', 'loadBalancingSettings01')
+            id: resourceId('Microsoft.Network/frontDoors/loadBalancingSettings', '${FD.Name}', 'loadBalancingSettings01')
           }
           backends: [
             {
