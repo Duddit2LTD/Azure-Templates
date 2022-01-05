@@ -30,6 +30,13 @@
                 "publicIPAllocationMethod": "Static",
                 "PIP_Name":                 "_VPN-PIP"
             }
+        },
+        "ResourceTags": {
+            "value": {
+                "cost center": "Core IT",
+                "delete": "yes",
+                "env": "DEV"
+            }
         }
     }
 

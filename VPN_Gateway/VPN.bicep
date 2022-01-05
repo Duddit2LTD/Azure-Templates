@@ -3,12 +3,14 @@ param location string
 param VNET_CIDR string
 param VPN object
 param PIP object
+param ResourceTags object
 
 
 
 resource Gateway_Vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: '${prefix}-GWVnet'
   location: location
+  tags: ResourceTags
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -29,6 +31,7 @@ resource Gateway_Vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 resource VPN_PIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: '${prefix}${PIP.PIP_Name}'
   location: location
+  tags: ResourceTags
   properties: {
     publicIPAllocationMethod: PIP.publicIPAllocationMethod
   }
@@ -48,6 +51,7 @@ resource VPN_PIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
   name: '${prefix}-VPNGateway'
   location: location
+  tags: ResourceTags
   dependsOn: [
     VPN_PIP
     Gateway_Vnet
