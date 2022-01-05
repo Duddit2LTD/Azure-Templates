@@ -71,11 +71,11 @@ resource STSConnection 'Microsoft.Network/connections@2021-05-01' = {
   properties: {
     connectionType: 'IPsec'
     virtualNetworkGateway1: {
-      id: '${resourceGroup().id}/providers/Microsoft.Network/'
+      id: '${resourceGroup().id}/providers/Microsoft.Network/virtualNetworkGateways/${prefix}-VPNGateway'
       properties: {}
     }
     localNetworkGateway2: {
-      id: '${resourceGroup().id}/providers/Microsoft.Network/'
+      id: '${resourceGroup().id}/providers/Microsoft.Network/localNetworkGateways/${prefix}${LocalGW.name}'
       properties: {}
     }
     connectionProtocol: 'IKEv2'
