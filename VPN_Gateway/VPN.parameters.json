@@ -16,10 +16,10 @@
         },
         "VPN": {
             "value": {
-                "SKU_Name":                  "Basic",
-                "SKU_Tier":                  "Basic",
+                "SKU_Name":                  "VPNGw2",
+                "SKU_Tier":                  "VPNGw2",
                 "privateIPAllocationMethod": "Dynamic",
-                "vpnType":                   "PolicyBased",
+                "vpnType":                   "RouteBased",
                 "vpnGatewayGeneration":      "Generation2"
             }
         },
@@ -36,6 +36,13 @@
                 "cost center":              "Core IT",
                 "delete":                   "yes",
                 "env":                      "DEV"
+            }
+        },
+        "LocalGW": {
+            "value": {
+                "Name": "",
+                "PIP":"",
+                "AddressSpace": "192.168.1.0/24"
             }
         }
     }

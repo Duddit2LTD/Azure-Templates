@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "connections_pjhome_name": {
+            "defaultValue": "pjhome",
+            "type": "String"
+        },
+        "virtualNetworkGateways_vpn_externalid": {
+            "defaultValue": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-case-arm-we/providers/Microsoft.Network/virtualNetworkGateways/vpn",
+            "type": "String"
+        },
+        "localNetworkGateways_Hattersley_Sky_externalid": {
+            "defaultValue": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-case-arm-we/providers/Microsoft.Network/localNetworkGateways/Hattersley_Sky",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/connections",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('connections_pjhome_name')]",
+            "location": "westeurope",
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[parameters('virtualNetworkGateways_vpn_externalid')]"
+                },
+                "localNetworkGateway2": {
+                    "id": "[parameters('localNetworkGateways_Hattersley_Sky_externalid')]"
+                },
+                "connectionType": "IPsec",
+                "connectionProtocol": "IKEv2",
+                "routingWeight": 0,
+                "sharedKey": "",
+                "enableBgp": false,
+                "useLocalAzureIpAddress": false,
+                "usePolicyBasedTrafficSelectors": false,
+                "ipsecPolicies": [],
+                "trafficSelectorPolicies": [],
+                "expressRouteGatewayBypass": false,
+                "dpdTimeoutSeconds": 0,
+                "connectionMode": "Default"
+            }
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "localNetworkGateways_Hattersley_Sky_name": {
+            "defaultValue": "Hattersley_Sky",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('localNetworkGateways_Hattersley_Sky_name')]",
+            "location": "westeurope",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "192.168.1.0/24",
+                        "192.168.1.0/24"
+                    ]
+                },
+                "gatewayIpAddress": "94.4.101.86"
+            }
+        }
+    ]
+}

@@ -4,6 +4,7 @@ param VNET_CIDR string
 param VPN object
 param PIP object
 param ResourceTags object
+param LocalGW object
 
 
 
@@ -48,6 +49,43 @@ resource VPN_PIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 
 }
 
+resource LocalGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
+  name: '${prefix}${LocalGW.name}'
+  properties: {
+    gatewayIpAddress: LocalGW.PIP
+    localNetworkAddressSpace: {
+      addressPrefixes: [
+        LocalGW.AddressSpace
+      ]
+    }
+  }
+}
+
+resource STSConnection 'Microsoft.Network/connections@2021-05-01' = {
+  name: '${prefix}-site'
+  location: location
+  dependsOn: [
+    VPNGateway
+    LocalGateway
+  ]
+  properties: {
+    connectionType: 'IPsec'
+    virtualNetworkGateway1: {
+      id: '${resourceGroup().id}/providers/Microsoft.Network/'
+      properties: {}
+    }
+    localNetworkGateway2: {
+      id: '${resourceGroup().id}/providers/Microsoft.Network/'
+      properties: {}
+    }
+    connectionProtocol: 'IKEv2'
+    routingWeight: 0
+    sharedKey: ''
+    enableBgp: false
+    connectionMode: 'Default'
+  }
+}
+
 resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
   name: '${prefix}-VPNGateway'
   location: location
@@ -59,6 +97,13 @@ resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
   
   properties: {
     gatewayType: 'Vpn'
+    vpnType: VPN.vpnType
+    vpnGatewayGeneration: VPN.vpnGatewayGeneration
+    sku: {
+      name: VPN.SKU_Name
+      tier: VPN.SKU_Tier
+    }
+
     ipConfigurations: [
       {
         name: 'default'
@@ -73,11 +118,7 @@ resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
         }
       }
     ]
-    vpnType: VPN.vpnType
-    vpnGatewayGeneration: VPN.vpnGatewayGeneration
-    sku: {
-      name: VPN.SKU_Name
-      tier: VPN.SKU_Tier
-    }
+    
+    
   }
 }
