@@ -25,10 +25,10 @@
         },
         "PIP": {
             "value": {
-                "SKU_Name": "Standard",
-                "SKU_Tier": "Regional",
+                "SKU_Name":                 "Standard",
+                "SKU_Tier":                 "Regional",
                 "publicIPAllocationMethod": "Static",
-                "PIP_Name": "_VPN-PIP"
+                "PIP_Name":                 "_VPN-PIP"
             }
         }
     }
