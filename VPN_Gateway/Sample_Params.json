@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westeurope"
+        },
+        "name": {
+            "value": "VPN-Gateway"
+        },
+        "gatewayType": {
+            "value": "Vpn"
+        },
+        "sku": {
+            "value": "VpnGw2AZ"
+        },
+        "vpnType": {
+            "value": "RouteBased"
+        },
+        "vpnGatewayGeneration": {
+            "value": "Generation2"
+        },
+        "subnetId": {
+            "value": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-ado-we/providers/Microsoft.Network/virtualNetworks/Gateway-VNET/subnets/GatewaySubnet"
+        },
+        "newPublicIpAddressName": {
+            "value": "VPN-GW-PIP"
+        }
+    }
+}

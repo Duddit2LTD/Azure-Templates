@@ -1,0 +1,144 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "gatewayType": {
+            "type": "string",
+            "defaultValue": "Vpn",
+            "allowedValues": [
+                "Vpn",
+                "ExpressRoute"
+            ]
+        },
+        "sku": {
+            "type": "string"
+        },
+        "vpnGatewayGeneration": {
+            "type": "string"
+        },
+        "vpnType": {
+            "type": "string",
+            "defaultValue": "RouteBased",
+            "allowedValues": [
+                "RouteBased",
+                "PolicyBased"
+            ]
+        },
+        "subnetId": {
+            "type": "string"
+        },
+        "newPublicIpAddressName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/Gateway-VNET-20220105071516",
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
+            ],
+            "tags": {},
+            "properties": {
+                "gatewayType": "[parameters('gatewayType')]",
+                "ipConfigurations": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[parameters('subnetId')]"
+                            },
+                            "publicIpAddress": {
+                                "id": "[resourceId('rg-team-5-sep-ado-we', 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                            }
+                        }
+                    }
+                ],
+                "vpnType": "[parameters('vpnType')]",
+                "vpnGatewayGeneration": "[parameters('vpnGatewayGeneration')]",
+                "sku": {
+                    "name": "[parameters('sku')]",
+                    "tier": "[parameters('sku')]"
+                }
+            }
+        },
+        {
+            "name": "Gateway-VNET-20220105071516",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "dependsOn": [],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "name": "Gateway-VNET",
+                            "id": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-ado-we/providers/Microsoft.Network/virtualNetworks/Gateway-VNET",
+                            "location": "westeurope",
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "properties": {
+                                "subnets": [
+                                    {
+                                        "name": "default",
+                                        "id": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-ado-we/providers/Microsoft.Network/virtualNetworks/Gateway-VNET/subnets/default",
+                                        "properties": {
+                                            "addressPrefix": "172.17.0.0/24"
+                                        }
+                                    },
+                                    {
+                                        "id": "/subscriptions/6c93e868-e85e-45c5-9a6c-ea366a538529/resourceGroups/rg-team-5-sep-ado-we/providers/Microsoft.Network/virtualNetworks/Gateway-VNET/subnets/GatewaySubnet",
+                                        "name": "GatewaySubnet",
+                                        "properties": {
+                                            "addressPrefix": "172.17.1.0/24"
+                                        }
+                                    }
+                                ],
+                                "addressSpace": {
+                                    "addressPrefixes": [
+                                        "172.17.0.0/16"
+                                    ]
+                                }
+                            },
+                            "tags": {},
+                            "apiVersion": "2019-09-01",
+                            "dependsOn": []
+                        }
+                    ]
+                },
+                "parameters": {}
+            },
+            "resourceGroup": "rg-team-5-sep-ado-we"
+        },
+        {
+            "apiVersion": "2020-08-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('newPublicIpAddressName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            },
+            "sku": {
+                "name": "Standard"
+            },
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ]
+        }
+    ]
+}
