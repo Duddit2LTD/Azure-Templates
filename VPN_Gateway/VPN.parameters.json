@@ -33,9 +33,9 @@
         },
         "ResourceTags": {
             "value": {
-                "cost center": "Core IT",
-                "delete": "yes",
-                "env": "DEV"
+                "cost center":              "Core IT",
+                "delete":                   "yes",
+                "env":                      "DEV"
             }
         }
     }
