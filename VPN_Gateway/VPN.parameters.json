@@ -3,13 +3,14 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "Location": {
-            "value": "UKSouth"
+            "value":                         "NorthEurope"
         },
         "Prefix": {
-            "value": "Prefix"
+            "value":                         "PJ"
         },
+        
         "VNET_CIDR": {
-            "value": "172.17",
+            "value":                         "172.17",
             "metadata": {
                 "description":"First 2 octects of the /16 VNET CIDR range - the last 2 octects are hardcoded in the template and combined meaning only 1 value needs to be set here for both VNET and Subnet"
             }
@@ -40,9 +41,9 @@
         },
         "LocalGW": {
             "value": {
-                "Name": "",
-                "PIP":"",
-                "AddressSpace": "192.168.1.0/24"
+                "Name":                     "-Home-GW",
+                "PIP":                      "94.4.101.86",
+                "AddressSpace":             "192.168.1.0/24"
             }
         }
     }

@@ -8,6 +8,7 @@ param LocalGW object
 
 
 
+
 resource Gateway_Vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: '${prefix}-GWVnet'
   location: location
@@ -40,17 +41,15 @@ resource VPN_PIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
     name: PIP.SKU_Name
     tier: PIP.SKU_Tier
   }
-  zones: [
-    '1'
-    '2'
-    '3'
-  ]
+  
 
 
 }
 
 resource LocalGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
   name: '${prefix}${LocalGW.name}'
+  location: location
+  tags: ResourceTags
   properties: {
     gatewayIpAddress: LocalGW.PIP
     localNetworkAddressSpace: {
@@ -61,30 +60,7 @@ resource LocalGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
   }
 }
 
-resource STSConnection 'Microsoft.Network/connections@2021-05-01' = {
-  name: '${prefix}-site'
-  location: location
-  dependsOn: [
-    VPNGateway
-    LocalGateway
-  ]
-  properties: {
-    connectionType: 'IPsec'
-    virtualNetworkGateway1: {
-      id: '${resourceGroup().id}/providers/Microsoft.Network/virtualNetworkGateways/${prefix}-VPNGateway'
-      properties: {}
-    }
-    localNetworkGateway2: {
-      id: '${resourceGroup().id}/providers/Microsoft.Network/localNetworkGateways/${prefix}${LocalGW.name}'
-      properties: {}
-    }
-    connectionProtocol: 'IKEv2'
-    routingWeight: 0
-    sharedKey: ''
-    enableBgp: false
-    connectionMode: 'Default'
-  }
-}
+
 
 resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
   name: '${prefix}-VPNGateway'
@@ -110,10 +86,10 @@ resource VPNGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
         properties: {
           privateIPAllocationMethod: VPN.privateIPAllocationMethod
           subnet: {
-            id: '${resourceGroup().id}/providers/Microsoft.Network/virtualNetworks/Gateway_Vnet/subnets/GatewaySubnet'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/virtualNetworks/${prefix}-GWVnet/subnets/GatewaySubnet'
           }
           publicIPAddress: {
-            id: '${resourceGroup().id}/providers/Microsoft.publicIPAddresses/${prefix}${PIP.PIP_Name}'
+            id: '${resourceGroup().id}/providers/Microsoft.Network/publicIPAddresses/${prefix}${PIP.PIP_Name}'
           }
         }
       }
