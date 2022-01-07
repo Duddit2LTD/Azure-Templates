@@ -12,7 +12,7 @@
         "VNET_CIDR": {
             "value":                         "172.17",
             "metadata": {
-                "description":"First 2 octects of the /16 VNET CIDR range - the last 2 octects are hardcoded in the template and combined meaning only 1 value needs to be set here for both VNET and Subnet"
+                "description":               "First 2 octects of the /16 VNET CIDR range - the last 2 octects are hardcoded in the template and combined meaning only 1 value needs to be set here for both VNET and Subnet"
             }
         },
         "VPN": {

@@ -7,6 +7,20 @@ param ResourceTags object
 param LocalGW object
 
 
+//list of vnets that need to peer to the Gateway_Vnet. To be used in a looping module
+var peerings = [
+  {
+    name: 'samplevnet01'
+  }
+
+  {
+    name: 'samplevnet02'
+  }
+
+]
+  
+
+resource peering 
 
 
 resource Gateway_Vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
