@@ -20,7 +20,7 @@ var peerings = [
 ]
   
 
-resource peering 
+//resource peering 
 
 
 resource Gateway_Vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
